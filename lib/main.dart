@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -40,11 +43,25 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    Widget scanButton = FloatingActionButton(
-      onPressed: _setIsScanner,
-      child: const Text('Scan'),
+    Widget scanButton = Padding(
+        padding: const EdgeInsets.only(
+          left: 24,
+          right: 24,
+          top: 16,
+          bottom: 16,
+        ),
+        child: FloatingActionButton(
+          onPressed: _setIsScanner,
+          backgroundColor: Colors.blue,
+          child: const Text(
+            'Scan',
+            style: TextStyle(color: Colors.white, fontSize: 24),
+          ),
+        ));
+    Widget scannedMsg = const Text(
+      'Scanned',
+      style: TextStyle(color: Colors.white, fontSize: 24),
     );
-    Widget scannedMsg = const Text('Scanned');
 
     return Scaffold(
       body: Center(child: _isScanned ? scannedMsg : scanButton),
