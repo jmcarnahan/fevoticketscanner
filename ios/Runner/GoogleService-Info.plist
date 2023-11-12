@@ -15,16 +15,16 @@
 	<key>STORAGE_BUCKET</key>
 	<string>fevo-sbx.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<false></false>
+	<false/>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false></false>
+	<false/>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>IS_GCM_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:492893892762:ios:ec924c6f62f2c26e1a2f23</string>
+	<string>1:492893892762:ios:9b95eb9740df60b21a2f23</string>
 </dict>
 </plist>
