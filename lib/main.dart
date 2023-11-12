@@ -42,14 +42,12 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     Widget scanButton = FloatingActionButton(
       onPressed: _setIsScanner,
-      child: Text('Scan'),
+      child: const Text('Scan'),
     );
-    Widget scannedMsg = Text('Scanned');
+    Widget scannedMsg = const Text('Scanned');
 
     return Scaffold(
-      body: Center(
-        child: _isScanned ? scannedMsg : scanButton
-      ),
+      body: Center(child: _isScanned ? scannedMsg : scanButton),
       backgroundColor: _isScanned ? Colors.lightGreen : Colors.white,
     );
   }
