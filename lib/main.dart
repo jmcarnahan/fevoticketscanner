@@ -42,40 +42,36 @@ class TicketList extends StatelessWidget {
             return const CircularProgressIndicator();
           }
 
-          var tickets = snapshot.data;
+          var tickets = snapshot.data?.docs;
 
-          print(tickets);
+          return ListView.builder(
+            itemCount: tickets?.length,
+            itemBuilder: (context, index) {
+              var ticket = tickets?[index];
+              var isScanned = ticket?["is_scanned"];
+              var price = ticket?["price"];
 
-          return const Text('foo');
-
-          // return ListView.builder(
-          //   itemCount: tickets.length,
-          //   itemBuilder: (context, index) {
-          //     var ticket = tickets[index];
-          //     var isScanned = ticket["is_scanned"];
-          //     var price = ticket["price"];
-
-          //     return ListTile(
-          //       title: Text("Event: ${ticket["event_name"]}"),
-          //       subtitle: Text("Price: $price"),
-          //       trailing: isScanned
-          //           ? Text("Scanned")
-          //           : ElevatedButton(
-          //               onPressed: () {
-          //                 // Handle scan button press
-          //                 // Update "is_scanned" in the database
-          //                 FirebaseFirestore.instance
-          //                     .collection("events")
-          //                     .doc(eventId)
-          //                     .collection("tickets")
-          //                     .doc(ticket.id)
-          //                     .update({"is_scanned": true});
-          //               },
-          //               child: Text("Scan"),
-          //             ),
-          //     );
-          //   },
-          // );
+              return ListTile(
+                title: const Text('Event Name'),
+                subtitle: Text("Price: $price"),
+                trailing: isScanned
+                    ? const Text("Scanned")
+                    : ElevatedButton(
+                        onPressed: () {
+                          // Handle scan button press
+                          // Update "is_scanned" in the database
+                          FirebaseFirestore.instance
+                              .collection("events")
+                              .doc(eventId)
+                              .collection("tickets")
+                              .doc(ticket?.id)
+                              .update({"is_scanned": true});
+                        },
+                        child: const Text("Scan"),
+                      ),
+              );
+            },
+          );
         },
       ),
     );
