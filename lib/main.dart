@@ -1,9 +1,11 @@
-import 'package:flutter/material.dart';
+import 'package:fevoticketscanner/config/web_config.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: firebaseOptions);
   runApp(const MyApp());
 }
 
@@ -12,60 +14,70 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Fevo Scanner Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Fevo Scanner Demo'),
+    return const MaterialApp(
+      home: TicketList(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class TicketList extends StatelessWidget {
+  final String eventId = "event1";
 
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  bool _isScanned = false;
-
-  void _setIsScanner() {
-    setState(() {
-      _isScanned = true;
-    });
-  }
+  const TicketList({super.key});
 
   @override
   Widget build(BuildContext context) {
-    Widget scanButton = Padding(
-        padding: const EdgeInsets.only(
-          left: 24,
-          right: 24,
-          top: 16,
-          bottom: 16,
-        ),
-        child: FloatingActionButton(
-          onPressed: _setIsScanner,
-          backgroundColor: Colors.blue,
-          child: const Text(
-            'Scan',
-            style: TextStyle(color: Colors.white, fontSize: 24),
-          ),
-        ));
-    Widget scannedMsg = const Text(
-      'Scanned',
-      style: TextStyle(color: Colors.white, fontSize: 24),
-    );
-
     return Scaffold(
-      body: Center(child: _isScanned ? scannedMsg : scanButton),
-      backgroundColor: _isScanned ? Colors.lightGreen : Colors.white,
+      appBar: AppBar(
+        title: const Text("Ticket List"),
+      ),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection("events")
+            .doc(eventId)
+            .collection("tickets")
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const CircularProgressIndicator();
+          }
+
+          var tickets = snapshot.data;
+
+          print(tickets);
+
+          return const Text('foo');
+
+          // return ListView.builder(
+          //   itemCount: tickets.length,
+          //   itemBuilder: (context, index) {
+          //     var ticket = tickets[index];
+          //     var isScanned = ticket["is_scanned"];
+          //     var price = ticket["price"];
+
+          //     return ListTile(
+          //       title: Text("Event: ${ticket["event_name"]}"),
+          //       subtitle: Text("Price: $price"),
+          //       trailing: isScanned
+          //           ? Text("Scanned")
+          //           : ElevatedButton(
+          //               onPressed: () {
+          //                 // Handle scan button press
+          //                 // Update "is_scanned" in the database
+          //                 FirebaseFirestore.instance
+          //                     .collection("events")
+          //                     .doc(eventId)
+          //                     .collection("tickets")
+          //                     .doc(ticket.id)
+          //                     .update({"is_scanned": true});
+          //               },
+          //               child: Text("Scan"),
+          //             ),
+          //     );
+          //   },
+          // );
+        },
+      ),
     );
   }
 }
