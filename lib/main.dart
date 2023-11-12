@@ -5,7 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(/*options: firebaseOptions*/);
+  // await Firebase.initializeApp(options: firebaseOptions); // Web
+  await Firebase.initializeApp(/*options: firebaseOptions*/); // IOS
   runApp(const MyApp());
 }
 
@@ -52,14 +53,12 @@ class TicketList extends StatelessWidget {
               var price = ticket?["price"];
 
               return ListTile(
-                title: const Text('Event Name'),
+                title: Text(ticket?.id ?? 'Ticket Name'),
                 subtitle: Text("Price: $price"),
                 trailing: isScanned
                     ? const Text("Scanned")
                     : ElevatedButton(
                         onPressed: () {
-                          // Handle scan button press
-                          // Update "is_scanned" in the database
                           FirebaseFirestore.instance
                               .collection("events")
                               .doc(eventId)
